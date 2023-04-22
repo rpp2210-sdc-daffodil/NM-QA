@@ -1,0 +1,25 @@
+Questions and answers
+
+{
+  data:
+  [
+    {
+      question_id: Number,
+      question: String,
+      question_date: String,
+      asker_name: String,
+      question_helpfulness: Number,
+      reported: Boolean,
+      answers: [
+        {
+          id: Number,
+          body: String,
+          answerer_name: String,
+          answer_date: String,
+          helpfulness: Number,
+          photos: [{id: Number, url: String}]
+        }, //...
+      ]
+    }, //...
+  ]
+}

@@ -1,0 +1,29 @@
+{
+  "name": "nmQnA",
+  "version": "1.0.0",
+  "description": "Atelier QandA microservice",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest",
+    "start": "npx nodemon server/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rpp2210-sdc-daffodil/NM-QA.git"
+  },
+  "author": "nick monteleone",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/rpp2210-sdc-daffodil/NM-QA/issues"
+  },
+  "homepage": "https://github.com/rpp2210-sdc-daffodil/NM-QA#readme",
+  "dependencies": {
+    "csv-parse": "^5.3.8",
+    "express": "^4.18.2",
+    "fs": "^0.0.1-security",
+    "nano": "^10.1.2",
+    "path": "^0.12.7",
+    "pg": "^8.10.0",
+    "postgres": "^3.3.4"
+  }
+}
