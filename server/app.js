@@ -24,10 +24,10 @@ app.use(express.json());
 //   })
 // });
 
-app.get('/qa/questions/:product_id', (req, res, next) => {
-  const productID = req.params.product_id;
-  const count = req.params.count ? req.params.count : 5;
-  const page = req.params.page ? req.params.page : 1;
+app.get('/qa/questions', (req, res, next) => {
+  const productID = req.query.product_id;
+  const count = req.query.count ? req.query.count : 5;
+  const page = req.query.page ? req.query.page : 1;
 
   queries.getQuestions(db, productID, count, page, (err, results) => {
     if (err) {
@@ -35,7 +35,7 @@ app.get('/qa/questions/:product_id', (req, res, next) => {
       res.sendStatus(500);
     } else {
       // console.log(results.rows[0].results.length);
-      res.json(results.rows);
+      res.json(results.rows[0]);
     }
   });
 });
@@ -51,7 +51,7 @@ app.get('/qa/questions/:question_id/answers', (req, res, next) => {
       res.sendStatus(500);
     } else {
       // console.log(results);
-      res.json(results.rows);
+      res.json(results.rows[0]);
     }
   });
 });
