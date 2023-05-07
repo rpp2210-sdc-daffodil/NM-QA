@@ -31,7 +31,7 @@ module.exports = {
                 )
               ), '[]'::json)
               FROM answers a
-              WHERE a.question_id = q.question_id
+              WHERE a.question_id = q.question_id AND NOT a.reported
             )
           )
       ) AS results
@@ -40,7 +40,7 @@ module.exports = {
         *,
         ROW_NUMBER() OVER (ORDER BY question_id ASC) AS rn
       FROM questions
-      WHERE product_id = ${id}
+      WHERE product_id = ${id} AND NOT reported
     ) q
     WHERE
       q.rn <= ${count}
@@ -83,9 +83,99 @@ module.exports = {
             *,
             ROW_NUMBER() OVER (ORDER BY answer_id ASC) AS rn
           FROM answers
-          WHERE question_id = ${id}
+          WHERE question_id = ${id} AND NOT reported
         ) a
         WHERE rn <= ${count}`,
+      (err, results) => {
+        if (err) {
+          cb(err);
+        } else {
+          cb(null, results);
+        }
+      },
+    );
+  },
+  addQuestion: (db, id, body, name, email, cb) => {
+    const currentDate = new Date();
+    const formattedDate = currentDate.toISOString();
+    db.query(
+      `INSERT INTO questions (question_id, product_id, question_body, asker_name, asker_email, question_date)
+        VALUES (DEFAULT, $1, $2, $3, $4, $5);`,
+      [id, body, name, email, formattedDate],
+      (err, results) => {
+        if (err) {
+          cb(err);
+        } else {
+          cb(null, results);
+        }
+      },
+    );
+  },
+  addAnswer: (db, id, body, name, email, photos, cb) => {
+    const currentDate = new Date();
+    const formattedDate = currentDate.toISOString();
+    db.query(
+      `INSERT INTO answers (answer_id, question_id, body, answerer_name, answerer_email, date_written)
+        VALUES (DEFAULT, $1, $2, $3, $4, $5) RETURNING answer_id;`,
+      [id, body, name, email, formattedDate],
+      (err, results) => {
+        if (err) {
+          cb(err);
+        } else {
+          const insertPromises = photos.map((p) => db.query(
+            `INSERT INTO photos (id, answer_id, url) VALUES (DEFAULT, $1, $2);`,
+            [results.rows[0].answer_id, p],
+          ));
+          Promise.all(insertPromises)
+            .then(() => {
+              cb(null, results);
+            })
+            .catch((error) => {
+              cb(error);
+            });
+        }
+      },
+    );
+  },
+  markQHelpful: (db, id, cb) => {
+    db.query(
+      `UPDATE questions SET question_helpfulness = question_helpfulness + 1 WHERE question_id = ${id}`,
+      (err, results) => {
+        if (err) {
+          cb(err);
+        } else {
+          cb(null, results);
+        }
+      },
+    );
+  },
+  markAHelpful: (db, id, cb) => {
+    db.query(
+      `UPDATE answers SET helpful = helpful + 1 WHERE answer_id = ${id}`,
+      (err, results) => {
+        if (err) {
+          cb(err);
+        } else {
+          cb(null, results);
+        }
+      },
+    );
+  },
+  markQReport: (db, id, cb) => {
+    db.query(
+      `UPDATE questions SET reported = true WHERE question_id = ${id}`,
+      (err, results) => {
+        if (err) {
+          cb(err);
+        } else {
+          cb(null, results);
+        }
+      },
+    );
+  },
+  markAReport: (db, id, cb) => {
+    db.query(
+      `UPDATE answers SET reported = true WHERE answer_id = ${id}`,
       (err, results) => {
         if (err) {
           cb(err);

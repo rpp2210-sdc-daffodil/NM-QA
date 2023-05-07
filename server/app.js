@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 const express = require('express');
 // eslint-disable-next-line import/extensions
 const queries = require('./queries.js');
@@ -56,47 +57,90 @@ app.get('/qa/questions/:question_id/answers', (req, res, next) => {
 });
 
 app.post('/qa/questions', (req, res, next) => {
-  const body = req.body.body;
-  const name = req.body.name;
-  const email = req.body.email;
+  const { body } = req.body;
+  const { name } = req.body;
+  const { email } = req.body;
   const productID = req.body.product_id;
-  console.log(body, name, email, productID);
-  res.sendStatus(201);
 
+  queries.addQuestion(db, productID, body, name, email, (err, results) => {
+    if (err) {
+      console.log(err);
+      res.sendStatus(501);
+    } else {
+      console.log(results);
+      res.sendStatus(201);
+    }
+  });
 });
 
 app.post('/qa/questions/:question_id/answers', (req, res, next) => {
   const questionID = req.params.question_id;
-  const body = req.body.body;
-  const name = req.body.name;
-  const email = req.body.email;
-  const photos = req.body.photos;
-  console.log(questionID);
-  res.sendStatus(201);
+  const { body } = req.body;
+  const { name } = req.body;
+  const { email } = req.body;
+  const { photos } = req.body;
+
+  queries.addAnswer(db, questionID, body, name, email, photos, (err, results) => {
+    if (err) {
+      console.log(err);
+      res.sendStatus(501);
+    } else {
+      console.log(results);
+      res.sendStatus(201);
+    }
+  });
 });
 
 app.put('/qa/questions/:question_id/helpful', (req, res, next) => {
   const questionID = req.params.question_id;
-  console.log(questionID);
-  res.sendStatus(204);
+  queries.markQHelpful(db, questionID, (err, results) => {
+    if (err) {
+      console.log(results);
+      res.sendStatus(505);
+    } else {
+      console.log(results);
+      res.sendStatus(204);
+    }
+  });
 });
 
 app.put('/qa/questions/:question_id/report', (req, res, next) => {
   const questionID = req.params.question_id;
-  console.log(questionID);
-  res.sendStatus(204);
+  queries.markQReport(db, questionID, (err, results) => {
+    if (err) {
+      console.log(results);
+      res.sendStatus(505);
+    } else {
+      console.log(results);
+      res.sendStatus(204);
+    }
+  });
 });
 
 app.put('/qa/answers/:answer_id/helpful', (req, res, next) => {
   const answerID = req.params.answer_id;
-  console.log(answerID);
-  res.sendStatus(204);
+  queries.markAHelpful(db, answerID, (err, results) => {
+    if (err) {
+      console.log(results);
+      res.sendStatus(505);
+    } else {
+      console.log(results);
+      res.sendStatus(204);
+    }
+  });
 });
 
 app.put('/qa/answers/:answer_id/report', (req, res, next) => {
   const answerID = req.params.answer_id;
-  console.log(answerID);
-  res.sendStatus(204);
+  queries.markAReport(db, answerID, (err, results) => {
+    if (err) {
+      console.log(results);
+      res.sendStatus(505);
+    } else {
+      console.log(results);
+      res.sendStatus(204);
+    }
+  });
 });
 
 module.exports = app;

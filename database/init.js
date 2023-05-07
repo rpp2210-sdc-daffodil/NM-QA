@@ -4,7 +4,7 @@ const db = new Client({
   user: 'nickmonteleone',
   host: 'localhost',
   database: 'qanda',
-  port: '5432'
+  port: '5432',
 });
 
 db.connect();

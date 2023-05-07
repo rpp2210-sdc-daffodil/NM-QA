@@ -4,7 +4,7 @@ const db = new Client({
   user: 'nickmonteleone',
   host: 'localhost',
   database: 'test',
-  port: '5432'
+  port: '5432',
 });
 
 db.connect();
