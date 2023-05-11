@@ -4,7 +4,6 @@ const request = require('supertest');
 describe('GET /qa/questions', () => {
   it('should return 200 status code', async () => {
     const response = await request(app).get('/qa/questions/123');
-    expect(response.headers)
     expect(response.statusCode).toBe(200);
   });
 });

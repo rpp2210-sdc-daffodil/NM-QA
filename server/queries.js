@@ -61,7 +61,7 @@ module.exports = {
         ${id} as question,
         ${page} as page,
         ${count} as count,
-        json_agg(
+        COALESCE(json_agg(
           json_build_object(
             'answer_id', a.answer_id,
             'body', a.body,
@@ -77,7 +77,7 @@ module.exports = {
               ), '[]'::json) FROM photos p WHERE p.answer_id = a.answer_id
             )
           )
-        ) as results
+        ), '[]'::json) as results
         FROM (
           SELECT
             *,

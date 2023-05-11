@@ -29,29 +29,38 @@ app.get('/qa/questions', (req, res, next) => {
   const count = req.query.count ? req.query.count : 5;
   const page = req.query.page ? req.query.page : 1;
 
-  queries.getQuestions(db, productID, count, page, (err, results) => {
-    if (err) {
-      console.log(err);
-      res.sendStatus(500);
-    } else {
-      // console.log(results.rows[0].results.length);
-      res.json(results.rows[0]);
-    }
-  });
+  if (req.query.product_id === 'null') {
+    res.sendStatus(500);
+  } else {
+    queries.getQuestions(db, productID, count, page, (err, results) => {
+      if (err) {
+        console.log(err);
+        res.sendStatus(500);
+      } else if (results.rows.length) {
+        // console.log(results.rows[0].results.length);
+        // console.log(results);
+        res.json(results.rows[0]);
+      } else {
+        res.json('[]');
+      }
+    });
+  }
 });
 
 app.get('/qa/questions/:question_id/answers', (req, res, next) => {
-  const questionID = req.params.question_id;
-  const count = req.query.count ? req.query.count : 5;
-  const page = req.query.page ? req.query.page : 1;
+  const questionID = Number(req.params.question_id);
+  const count = req.params.count ? req.params.count : 5;
+  const page = req.params.page ? req.params.page : 1;
 
   queries.getAnswers(db, questionID, count, page, (err, results) => {
     if (err) {
       console.log(err);
       res.sendStatus(500);
-    } else {
-      // console.log(results);
+    } else if (results.rows.length) {
+      // console.log('a', results.rows);
       res.json(results.rows[0]);
+    } else {
+      res.json('[]');
     }
   });
 });

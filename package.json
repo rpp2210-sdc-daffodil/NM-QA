@@ -4,7 +4,7 @@
   "description": "Atelier QandA microservice",
   "main": "index.js",
   "scripts": {
-    "test": "jest",
+    "test": "jest --coverage",
     "start": "npx nodemon server/index.js"
   },
   "repository": {
