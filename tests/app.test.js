@@ -1,11 +1,37 @@
 const app = require('../server/app.js');
 const request = require('supertest');
+const sinon = require('sinon');
+const queries = require('../server/queries.js');
 
 describe('GET /qa/questions', () => {
-  it('should return 200 status code', async () => {
-    const response = await request(app).get('/qa/questions/123');
-    expect(response.statusCode).toBe(200);
+  afterEach(() => {
+    sinon.restore(); // Restore the original query function after each test
   });
+
+  it('should call queries.getQuestions with the correct parameters', async () => {
+    const mockResults = { rows: [{ /* mock results */ }] };
+    const stub = sinon.stub(queries, 'getQuestions').yields(null, mockResults);
+
+    const response = await request(app).get('/qa/questions?product_id=2');
+
+    expect(stub.calledOnce).toBe(true);
+    expect(stub.firstCall.args[1]).toEqual('2');
+    expect(stub.firstCall.args[2]).toEqual(5);
+    expect(stub.firstCall.args[3]).toEqual(1);
+
+    expect(response.statusCode).toBe(200);
+    expect(response.body).toEqual(mockResults.rows[0]);
+  });
+
+  it('should return 500 status code when product_id is null', async () => {
+    const stub = sinon.stub(queries, 'getQuestions');
+
+    const response = await request(app).get('/qa/questions?product_id=null');
+
+    expect(stub.called).toBe(false); // Make sure the query function is not called
+    expect(response.statusCode).toBe(500);
+  });
+
 });
 
 describe('GET /qa/questions/:question_id/answers', () => {
@@ -37,7 +63,7 @@ describe('POST /qa/questions/:question_id/answers', () => {
         body: 'test answer',
         name: 'test name',
         email: 'test@test.com',
-        photos: [],
+        photos: ['https://unsplash.com/photos/YdAqiUkUoWA'],
       });
     expect(response.statusCode).toBe(201);
   });

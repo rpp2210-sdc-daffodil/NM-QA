@@ -2,6 +2,7 @@
 const express = require('express');
 // eslint-disable-next-line import/extensions
 const queries = require('./queries.js');
+const path = require('path');
 
 const app = express();
 
@@ -12,6 +13,13 @@ const dbTest = require('../database/initTest.js');
 const db = require('../database/init.js');
 
 app.use(express.json());
+
+// app.get('/loaderio-3498c72ec54ff4ba2551d3aba8849440*', (req, res) => {
+//   const options = {
+//     root: path.join(__dirname, '../public'),
+//   };
+//   res.sendFile('loaderio-verification.txt', options);
+// });
 
 // app.get('/test', (req, res, next) => {
 //   dbTest.query('SELECT * from photos', (err, results) => {
@@ -34,10 +42,11 @@ app.get('/qa/questions', (req, res, next) => {
   } else {
     queries.getQuestions(db, productID, count, page, (err, results) => {
       if (err) {
-        console.log(err);
+        // console.log(err);
         res.sendStatus(500);
       } else if (results.rows.length) {
         // console.log(results.rows[0].results.length);
+        // console.log(results);
         // console.log(results);
         res.json(results.rows[0]);
       } else {
@@ -151,5 +160,7 @@ app.put('/qa/answers/:answer_id/report', (req, res, next) => {
     }
   });
 });
+
+// app.use(express.static('/Users/nickmonteleone/Documents/RPP2210/SDC/server/public'));
 
 module.exports = app;

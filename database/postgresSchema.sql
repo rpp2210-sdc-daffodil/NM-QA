@@ -3,7 +3,7 @@
 CREATE TABLE questions (
   question_id SERIAL PRIMARY KEY,
   question_body TEXT NOT NULL,
-  question_date VARCHAR(20) DEFAULT NOW(),
+  question_date VARCHAR(50) DEFAULT NOW(),
   asker_name VARCHAR(60) NOT NULL,
   asker_email VARCHAR(254) NOT NULL,
   question_helpfulness INTEGER NOT NULL DEFAULT 0,
@@ -15,7 +15,7 @@ CREATE TABLE answers (
   answer_id SERIAL PRIMARY KEY,
   question_id INTEGER REFERENCES questions(question_id),
   body TEXT NOT NULL,
-  date_written VARCHAR(20) DEFAULT NOW(),
+  date_written VARCHAR(50) DEFAULT NOW(),
   answerer_name VARCHAR(60) NOT NULL,
   answerer_email VARCHAR(254) NOT NULL,
   reported BOOLEAN NOT NULL DEFAULT false,

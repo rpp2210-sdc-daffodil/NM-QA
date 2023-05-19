@@ -40,10 +40,10 @@ module.exports = {
         *,
         ROW_NUMBER() OVER (ORDER BY question_id ASC) AS rn
       FROM questions
-      WHERE product_id = ${id} AND NOT reported
+      WHERE product_id = 1000 AND NOT reported
     ) q
     WHERE
-      q.rn <= ${count}
+      q.rn <= 10
     GROUP BY
       q.product_id;`,
       (err, results) => {
@@ -85,7 +85,7 @@ module.exports = {
           FROM answers
           WHERE question_id = ${id} AND NOT reported
         ) a
-        WHERE rn <= ${count}`,
+        WHERE rn <= ${count};`,
       (err, results) => {
         if (err) {
           cb(err);
@@ -139,7 +139,7 @@ module.exports = {
   },
   markQHelpful: (db, id, cb) => {
     db.query(
-      `UPDATE questions SET question_helpfulness = question_helpfulness + 1 WHERE question_id = ${id}`,
+      `UPDATE questions SET question_helpfulness = question_helpfulness + 1 WHERE question_id = ${id};`,
       (err, results) => {
         if (err) {
           cb(err);
@@ -151,7 +151,7 @@ module.exports = {
   },
   markAHelpful: (db, id, cb) => {
     db.query(
-      `UPDATE answers SET helpful = helpful + 1 WHERE answer_id = ${id}`,
+      `UPDATE answers SET helpful = helpful + 1 WHERE answer_id = ${id};`,
       (err, results) => {
         if (err) {
           cb(err);
@@ -163,7 +163,7 @@ module.exports = {
   },
   markQReport: (db, id, cb) => {
     db.query(
-      `UPDATE questions SET reported = true WHERE question_id = ${id}`,
+      `UPDATE questions SET reported = true WHERE question_id = ${id};`,
       (err, results) => {
         if (err) {
           cb(err);
@@ -175,7 +175,7 @@ module.exports = {
   },
   markAReport: (db, id, cb) => {
     db.query(
-      `UPDATE answers SET reported = true WHERE answer_id = ${id}`,
+      `UPDATE answers SET reported = true WHERE answer_id = ${id};`,
       (err, results) => {
         if (err) {
           cb(err);
