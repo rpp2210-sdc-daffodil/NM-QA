@@ -1,7 +1,7 @@
 
 
 CREATE TABLE questions (
-  question_id SERIAL PRIMARY KEY,
+  question_id INTEGER PRIMARY KEY,
   question_body TEXT NOT NULL,
   question_date VARCHAR(50) DEFAULT NOW(),
   asker_name VARCHAR(60) NOT NULL,
@@ -12,7 +12,7 @@ CREATE TABLE questions (
 );
 
 CREATE TABLE answers (
-  answer_id SERIAL PRIMARY KEY,
+  answer_id INTEGER PRIMARY KEY,
   question_id INTEGER REFERENCES questions(question_id),
   body TEXT NOT NULL,
   date_written VARCHAR(50) DEFAULT NOW(),
@@ -24,6 +24,6 @@ CREATE TABLE answers (
 
 CREATE TABLE photos (
   answer_id INTEGER REFERENCES answers(answer_id),
-  id SERIAL PRIMARY KEY,
+  id INTEGER PRIMARY KEY,
   url TEXT NOT NULL
 );

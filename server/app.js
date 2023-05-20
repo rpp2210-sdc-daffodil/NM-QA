@@ -14,13 +14,6 @@ const db = require('../database/init.js');
 
 app.use(express.json());
 
-// app.get('/loaderio-3498c72ec54ff4ba2551d3aba8849440*', (req, res) => {
-//   const options = {
-//     root: path.join(__dirname, '../public'),
-//   };
-//   res.sendFile('loaderio-verification.txt', options);
-// });
-
 // app.get('/test', (req, res, next) => {
 //   dbTest.query('SELECT * from photos', (err, results) => {
 //     if (err) {
@@ -44,13 +37,11 @@ app.get('/qa/questions', (req, res, next) => {
       if (err) {
         // console.log(err);
         res.sendStatus(500);
-      } else if (results.rows.length) {
+      } else {
         // console.log(results.rows[0].results.length);
         // console.log(results);
         // console.log(results);
         res.json(results.rows[0]);
-      } else {
-        res.json('[]');
       }
     });
   }
@@ -65,11 +56,9 @@ app.get('/qa/questions/:question_id/answers', (req, res, next) => {
     if (err) {
       console.log(err);
       res.sendStatus(500);
-    } else if (results.rows.length) {
+    } else {
       // console.log('a', results.rows);
       res.json(results.rows[0]);
-    } else {
-      res.json('[]');
     }
   });
 });

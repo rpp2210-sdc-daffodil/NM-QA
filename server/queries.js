@@ -40,10 +40,10 @@ module.exports = {
         *,
         ROW_NUMBER() OVER (ORDER BY question_id ASC) AS rn
       FROM questions
-      WHERE product_id = 1000 AND NOT reported
+      WHERE product_id = ${id} AND NOT reported
     ) q
     WHERE
-      q.rn <= 10
+      q.rn <= ${count}
     GROUP BY
       q.product_id;`,
       (err, results) => {
