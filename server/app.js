@@ -7,7 +7,7 @@ const path = require('path');
 const app = express();
 
 // eslint-disable-next-line import/extensions
-const dbTest = require('../database/initTest.js');
+//const dbTest = require('../database/initTest.js');
 
 // eslint-disable-next-line import/extensions
 const db = require('../database/init.js');
